@@ -48,9 +48,7 @@
                         </thead>
                     {% endif %}
                     <tbody>
-                        {% for row in grouping.rows %}
-                            {{ row.html }}
-                        {% endfor %}
+                        {{ grouping.html }}
                     </tbody>
                     {% if grouping.column_feet %}
                         <tfoot>

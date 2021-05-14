@@ -248,6 +248,9 @@ class Grouping:
         self.inbound = inbound
         self.column_feet = {}
 
+    def html(self):
+        return mark_safe(''.join(row.html() for row in self.rows))
+
     def __str__(self):
         if self.inbound:
             return 'Inbound'
@@ -470,11 +473,12 @@ class Row:
             if type(cell) is Repetition:
                 times.append(f'<td colspan="{cell.colspan}" rowspan="{cell.rowspan}" class="then-every">{cell}</td>')
             else:
-                if self.has_waittimes and not cell.wait_time and not cell.first and not cell.last:
+                wait_time = type(cell) is Cell and cell.wait_time
+                if type(cell) is Cell and self.has_waittimes and not wait_time and not cell.first and not cell.last:
                     rowspan = ' rowspan="2"'
                 else:
                     rowspan = ''
-                if not self.has_waittimes or cell.wait_time or not cell.first:
+                if not self.has_waittimes or wait_time or not (type(cell) is Cell and cell.first):
                     if type(cell) is Cell and not cell.last and cell.stoptime.activity == 'setDown':
                         cell = f'{cell}<abbr title="sets down only">s</abbr>'
                     times.append(f'<td{rowspan}>{cell}</td>')
@@ -483,7 +487,7 @@ class Row:
 
         tr_class = ' class="minor"' if self.is_minor() else ''
 
-        return mark_safe(f"""<tr{tr_class}><th>{th}</th>{times}</tr>{second_row}""")
+        return f"""<tr{tr_class}><th>{th}</th>{times}</tr>{second_row}"""
 
         """
                              <tr{% if row.is_minor %} class="minor"{% endif %}>
@@ -515,6 +519,7 @@ class Row:
                                 </tr>
                             {% endif %}
     """
+
 
 class Stop:
     def __init__(self, atco_code):
