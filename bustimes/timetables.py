@@ -3,6 +3,7 @@ from django.utils.timezone import localdate
 from difflib import Differ
 from functools import cmp_to_key
 from django.db.models import Prefetch
+from django.utils.safestring import mark_safe
 from .utils import format_timedelta
 from .models import get_calendars, get_routes, Calendar, Trip, StopTime
 
@@ -452,6 +453,68 @@ class Row:
     def permanently_suspended(self):
         return hasattr(self.stop, 'suspended') and self.stop.suspended
 
+    def html(self):
+        if self.stop.pk:
+            th = f'<a href="{self.stop.get_absolute_url()}">{self.stop.get_qualified_name()}</a>'
+            # {% if row.stop.suspended %}🚧 {% elif row.stop.situation %}⚠️ {% endif %}
+        else:
+            th = self.stop
+
+        if self.has_waittimes:
+            second_row = f"""<tr class="dep"><th>{th}</th>"""
+        else:
+            second_row = ''
+
+        times = []
+        for cell in self.times:
+            if type(cell) is Repetition:
+                times.append(f'<td colspan="{cell.colspan}" rowspan="{cell.rowspan}" class="then-every">{cell}</td>')
+            else:
+                if self.has_waittimes and not cell.wait_time and not cell.first and not cell.last:
+                    rowspan = ' rowspan="2"'
+                else:
+                    rowspan = ''
+                if not self.has_waittimes or cell.wait_time or not cell.first:
+                    if type(cell) is Cell and not cell.last and cell.stoptime.activity == 'setDown':
+                        cell = f'{cell}<abbr title="sets down only">s</abbr>'
+                    times.append(f'<td{rowspan}>{cell}</td>')
+
+        times = ''.join(times)
+
+        tr_class = ' class="minor"' if self.is_minor() else ''
+
+        return mark_safe(f"""<tr{tr_class}><th>{th}</th>{times}</tr>{second_row}""")
+
+        """
+                             <tr{% if row.is_minor %} class="minor"{% endif %}>
+                                <th>
+                                    {% if row.stop.pk %}
+                                        <a href="{{ row.stop.get_absolute_url }}">{% if row.stop.suspended %}🚧 {% elif row.stop.situation %}⚠️ {% endif %}{{ row.stop.get_qualified_name }}</a>
+                                    {% else %}{{ row.stop }}{% endif %}
+                                </th>
+                            {% for cell in row.times %}
+                                {% if cell.colspan %}
+                                    <td{% if grouping.heads or grouping.column_feet %} colspan="{{ cell.colspan }}"{% endif %} rowspan="{{ cell.rowspan }}" class="then-every">{{ cell }}</td>
+                                {% else %}
+                                    <td{% if row.has_waittimes and not cell.wait_time and not cell.first and not cell.last %} rowspan="2"{% endif %}>{% if not row.has_waittimes or cell.wait_time or not cell.first %}{{ cell }}{% if not cell.last and cell.stoptime.activity == 'setDown' %}<abbr title="sets down only">s</abbr>{% endif %}{% endif %}</td>
+                                {% endif %}
+                            {% endfor %}
+                            </tr>
+                            {% if row.has_waittimes %}
+                                <tr class="dep">
+                                    <th>
+                                        {% if row.stop.pk %}
+                                            <a href="{{ row.stop.get_absolute_url }}">{{ row.stop.get_qualified_name }}</a>
+                                        {% else %}
+                                            {{ row.stop }}
+                                        {% endif %}
+                                    </th>
+                                    {% for cell in row.times %}{% if cell.wait_time or cell.first or cell.last %}
+                                        <td>{% if cell.wait_time or not cell.last %}{{ cell.departure_time }}{% if not cell.last and cell.stoptime.activity == 'setDown' %}<abbr title="sets down only">s</abbr>{% endif %}{% endif %}</td>
+                                    {% endif %}{% endfor %}
+                                </tr>
+                            {% endif %}
+    """
 
 class Stop:
     def __init__(self, atco_code):
