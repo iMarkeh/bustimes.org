@@ -457,16 +457,15 @@ class Row:
         return hasattr(self.stop, 'suspended') and self.stop.suspended
 
     def html(self):
-        if self.stop.pk:
-            th = f'<a href="{self.stop.get_absolute_url()}">{self.stop.get_qualified_name()}</a>'
-            # {% if row.stop.suspended %}🚧 {% elif row.stop.situation %}⚠️ {% endif %}
-        else:
+        if type(self.stop) is Stop:
             th = self.stop
-
-        if self.has_waittimes:
-            second_row = f"""<tr class="dep"><th>{th}</th>"""
         else:
-            second_row = ''
+            stop_name = self.stop.get_qualified_name()
+            if self.stop.suspended:
+                stop_name = f'🚧 {stop_name}'
+            elif self.stop.situation:
+                stop_name = f'⚠️ {stop_name}'
+            th = f'<a href="{self.stop.get_absolute_url()}">{stop_name}</a>'
 
         times = []
         for cell in self.times:
@@ -486,8 +485,31 @@ class Row:
         times = ''.join(times)
 
         tr_class = ' class="minor"' if self.is_minor() else ''
+        th_rowspan = ' rowspan="2"' if self.has_waittimes else ''
 
-        return f"""<tr{tr_class}><th>{th}</th>{times}</tr>{second_row}"""
+        first_row = f'<tr{tr_class}><th{th_rowspan}>{th}</th>{times}</tr>'
+
+        if self.has_waittimes:
+            times = []
+            for cell in self.times:
+                if type(cell) is Cell:
+                    if cell.wait_time or cell.first or cell.last:
+                        times.append(f'<td>{cell}</td>')
+                    else:
+                        times.append(cell)
+                else:
+                    times.append(cell)
+
+                # {{ cell.departure_time }}{% if not cell.last and cell.stoptime.activity == 'setDown' %}<abbr title="sets down only">s</abbr>{% endif %}{% endif %}</td>
+
+                # <td>{% if cell.wait_time or not cell.last %}{{ cell.departure_time }}{% if not cell.last and cell.stoptime.activity == 'setDown' %}<abbr title="sets down only">s</abbr>{% endif %}{% endif %}</td>
+
+            times = ''.join(times)
+            second_row = f'<tr class="dep">{times}</tr>'
+        else:
+            second_row = ''
+
+        return f'{first_row}{second_row}'
 
         """
                              <tr{% if row.is_minor %} class="minor"{% endif %}>
