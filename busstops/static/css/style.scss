@@ -16,8 +16,55 @@
     @import '62em';
 }
 
-@media (min-width: 106.5em) {
-    @import '99em';
+@media (prefers-color-scheme: dark) {
+    body {
+        background: #333;
+        color: #eee;
+    }
+
+    .tabs li {
+        background: #333;
+    }
+
+    a {
+        color: #bbf;
+    }
+
+    header a {
+        color: #fff;
+    }
+
+    header a:hover {
+        background: #111;
+    }
+
+    header,
+    .button,
+    button,
+    input[type=submit] {
+        background: #222;
+        border-color: #000;
+    }
+
+    .has-smalls small,
+    .name {
+        color: #fff;
+    }
+
+    .name {
+        border-color: #000;
+    }
+
+    select {
+        color: #fff;
+        border-color: #000;
+    }
+
+    .breadcrumb,
+    footer ul,
+    .tabs li {
+        border-color: #222;
+    }
 }
 
 @media print {
