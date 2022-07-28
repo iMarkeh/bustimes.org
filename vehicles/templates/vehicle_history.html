@@ -22,7 +22,7 @@
 
     <h1>Recent changes</h1>
 
-    <form>
+    <form method="GET" autocomplete="off">
         {{ filter.form.as_p }}
 
         <p><input type="submit" value="Search"></p>
@@ -36,4 +36,3 @@
 {% endif %}
 
 {% endblock %}
-

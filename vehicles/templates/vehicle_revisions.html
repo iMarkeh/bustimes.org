@@ -1,48 +1,39 @@
 {% load humanize %}
 
-<div class="table-wrapper">
-<table class="compact">
-    <thead>
-        {% if not by_user %}<th scope="col">User</th>{% endif %}
-        <th scope="col">Date</th>
-        {% if not vehicle %}<th scope="col">Vehicle</th>{% endif %}
-        <th scope="col">Changed</th>
-    </thead>
-    <tbody>
-        {% for revision in revisions %}
-        <tr>
-            {% if not by_user %}<td class="link">{% if revision.user %}<a href="{{ revision.user.get_absolute_url }}">{{ revision.user }}</a>{% endif %}</td>{% endif %}
-            <td>{{ revision.datetime|naturaltime }}</td>
+<ul class="history">
+    {% for revision in revisions %}
+        <li>
             {% if not vehicle %}
-                <td class="link"><a href="{{ revision.vehicle.get_absolute_url }}">{{ revision.vehicle }}</a></td>
+                <a href="{{ revision.vehicle.get_absolute_url }}">{{ revision.vehicle }}</a>
             {% endif %}
-            <td>
-                {% for key, from, to in revision.list_changes %}
-                    {{ key }}
-                    {% if from %}
-                        from {{ from }}
-                    {% endif %}
-                    {% if to %}
-                        to
-                        {{ to }}
-                    {% endif %}
-                    <br>
-                {% endfor %}
-                {% for feature in revision.vehiclerevisionfeature_set.all %}
-                    {{ feature }}
-                {% endfor %}
-                {% if revision.message %}
-                    <div class="wrap">{{ revision.message|urlize }}</div>
-                {% endif %}
-            </td>
-            <td>
+            <small>
+                {% if not by_user %}{% if revision.user %}
+                    <a href="{{ revision.user.get_absolute_url }}">{{ revision.user }}</a>
+                    •
+                {% endif %}{% endif %}
+                {{ revision.datetime|naturaltime }}
                 <button class="action" data-url="{{ revision.id }}/revert">revert</button>
-            </td>
-        </tr>
+            </small>
+            {% for key, from, to in revision.list_changes %}
+                {{ key }}
+                {% if from %}
+                    from {{ from }}
+                {% endif %}
+                {% if to %}
+                    to
+                    {{ to }}
+                {% endif %}
+                <br>
+            {% endfor %}
+            {% for feature in revision.vehiclerevisionfeature_set.all %}
+                {{ feature }}
+            {% endfor %}
+            {% if revision.message %}
+                <div>{{ revision.message|urlize }}</div>
+            {% endif %}
+        </li>
         {% endfor %}
-    </tbody>
-</table>
-</div>
+</ul>
 
 <script>
 (function () {

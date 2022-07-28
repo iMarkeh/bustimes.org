@@ -963,6 +963,26 @@ table {
     }
 }
 
+.history {
+    li {
+        border-bottom: 1px solid $border-color;
+        padding: .25em 0;
+    }
+
+    small {
+        display: block;
+        font-size: .75em;
+    }
+
+    button {
+        float: right    ;
+    }
+
+    a {
+        display: inline;
+    }
+}
+
 .fleet {
     .livery-cell {
         padding-left: 3.25em;
