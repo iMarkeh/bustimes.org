@@ -29,9 +29,7 @@ ENV PATH=$VIRTUAL_ENV/bin:$PATH
 
 WORKDIR /app/
 
-COPY --from=1 $VIRTUAL_ENV $VIRTUAL_ENV
-COPY --from=0 /app/node_modules /app/node_modules
-COPY --from=0 /app/busstops/static /app/busstops/static
+COPY --from=0 $VIRTUAL_ENV $VIRTUAL_ENV
 COPY . /app/
 
 ENV PORT=8000 SECRET_KEY=f STATIC_ROOT=/staticfiles
