@@ -1,15 +1,3 @@
-FROM node:20
-
-WORKDIR /app/
-
-COPY package.json package-lock.json /app/
-RUN npm install
-
-COPY busstops/static /app/busstops/static
-COPY .eslintrc.js tsconfig.json /app/
-RUN npm run lint && npm run build
-
-
 FROM python:3.11
 # the non-slim image has GCC which is needed for installing some stuff
 
