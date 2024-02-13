@@ -9,7 +9,7 @@ import {
 } from "react-map-gl/maplibre";
 
 import { useRoute } from "wouter";
-import { navigate } from "wouter/use-location";
+import { navigate } from "wouter/use-browser-location";
 
 import { LngLatBounds } from "maplibre-gl";
 
