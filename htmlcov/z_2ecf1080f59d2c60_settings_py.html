@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_2ecf1080f59d2c60_tests_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.4">coverage.py v7.6.4</a>,
-            created at 2025-03-18 19:52 +0000
+            created at 2025-04-13 18:31 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -95,7 +95,7 @@
     <p class="run"><span class="n"><a id="t13" href="#t13">13</a></span><span class="t"><span class="key">from</span> <span class="nam">sentry_sdk</span><span class="op">.</span><span class="nam">integrations</span><span class="op">.</span><span class="nam">redis</span> <span class="key">import</span> <span class="nam">RedisIntegration</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t14" href="#t14">14</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t15" href="#t15">15</a></span><span class="t"><span class="nam">BASE_DIR</span> <span class="op">=</span> <span class="nam">Path</span><span class="op">(</span><span class="nam">__file__</span><span class="op">)</span><span class="op">.</span><span class="nam">resolve</span><span class="op">(</span><span class="op">)</span><span class="op">.</span><span class="nam">parent</span><span class="op">.</span><span class="nam">parent</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t16" href="#t16">16</a></span><span class="t"><span class="nam">SECRET_KEY</span> <span class="op">=</span> <span class="nam">os</span><span class="op">.</span><span class="nam">environ</span><span class="op">[</span><span class="str">"SECRET_KEY"</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t16" href="#t16">16</a></span><span class="t"><span class="nam">SECRET_KEY</span> <span class="op">=</span> <span class="nam">os</span><span class="op">.</span><span class="nam">environ</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span><span class="str">"SECRET_KEY"</span><span class="op">,</span> <span class="str">""</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t17" href="#t17">17</a></span><span class="t"><span class="nam">ALLOWED_HOSTS</span> <span class="op">=</span> <span class="nam">os</span><span class="op">.</span><span class="nam">environ</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t18" href="#t18">18</a></span><span class="t">    <span class="str">"ALLOWED_HOSTS"</span><span class="op">,</span> <span class="str">"[::1] 127.0.0.1 localhost 16.local"</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t19" href="#t19">19</a></span><span class="t"><span class="op">)</span><span class="op">.</span><span class="nam">split</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -343,10 +343,10 @@
     <p class="pln"><span class="n"><a id="t261" href="#t261">261</a></span><span class="t">    <span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t262" href="#t262">262</a></span><span class="t">        <span class="key">return</span> <span class="num">0</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t263" href="#t263">263</a></span><span class="t">    <span class="key">if</span> <span class="nam">url</span><span class="op">.</span><span class="nam">startswith</span><span class="op">(</span><span class="str">"/stops/"</span><span class="op">)</span> <span class="key">or</span> <span class="nam">url</span><span class="op">.</span><span class="nam">startswith</span><span class="op">(</span><span class="str">"/services/"</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t264" href="#t264">264</a></span><span class="t">        <span class="key">return</span> <span class="num">0.004</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t264" href="#t264">264</a></span><span class="t">        <span class="key">return</span> <span class="num">0.0005</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t265" href="#t265">265</a></span><span class="t">    <span class="key">if</span> <span class="nam">url</span><span class="op">.</span><span class="nam">startswith</span><span class="op">(</span><span class="str">"/vehicles"</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t266" href="#t266">266</a></span><span class="t">        <span class="key">return</span> <span class="num">0.0005</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t267" href="#t267">267</a></span><span class="t">    <span class="key">return</span> <span class="num">0.001</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t266" href="#t266">266</a></span><span class="t">        <span class="key">return</span> <span class="num">0.0001</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t267" href="#t267">267</a></span><span class="t">    <span class="key">return</span> <span class="num">0.0003</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t268" href="#t268">268</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t269" href="#t269">269</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="exc show_exc"><span class="n"><a id="t270" href="#t270">270</a></span><span class="t"><span class="key">if</span> <span class="key">not</span> <span class="nam">TEST</span><span class="op">:</span>  <span class="com"># pragma: nocover</span>&nbsp;</span><span class="r"></span></p>
@@ -419,7 +419,7 @@
             <a class="nav" href="z_2ecf1080f59d2c60_tests_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.4">coverage.py v7.6.4</a>,
-            created at 2025-03-18 19:52 +0000
+            created at 2025-04-13 18:31 +0000
         </p>
     </div>
 </footer>
